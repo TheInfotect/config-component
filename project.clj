@@ -10,4 +10,6 @@
   :aot [datamos.config.core]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
-             :dev     {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}})
+             :dev     {:dependencies [[org.clojure/test.check "0.10.0-alpha2"]]}}
+  :repositories [["releases" {:url "https://clojars.org/repo"
+                              :creds :gpg}]])
