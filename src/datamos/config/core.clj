@@ -6,7 +6,8 @@
              [communication :as dcom]
              [base :as base]
              [rdf-function :as rdf-fn]
-             [messaging :as dm]]
+             [messaging :as dm]
+             [sign-up :as sup]]
             [clojure.core.async :as async]))
 
 (defonce ^:private config (atom {}))
@@ -84,19 +85,18 @@
                        (rdf-fn/predicate-filter msg-header #{:dms-def/transmit}))]
     (swap! the-registry dissoc sender)))
 
-(def component-fns {:datamos/registration datamos.config/registration
-                    :datamos/registry     datamos.config/register
-                    :datamos/de-register  datamos.config/de-register})
+(def component-fns {:datamos/registration datamos.config.core/registration
+                    :datamos/registry     datamos.config.core/register
+                    :datamos/de-register  datamos.config.core/de-register})
 
 (reset! config {:datamos-cfg/queue-name "config.datamos-fn"
                 :dms-def/provides       component-fns})
 
 (base/component-function {:datamos-cfg/component-type :datamos-fn/core
                           :datamos-cfg/component-fn   :datamos-fn/registry
-                          :datamos-cfg/local-register datamos.config/local-register
-                          :dms-def/provides component-fns})
+                          :datamos-cfg/local-register datamos.config.core/local-register
+                          :dms-def/provides datamos.config.core/component-fns})
 
 (defn -main
   [& args]
   (dc/reset))
-

@@ -4,9 +4,9 @@
   :license {:name "GNU AFFERO GENERAL PUBLIC LICENSE, Version 3"
             :url  "https://www.gnu.org/licenses/agpl-3.0.nl.html"}
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
-                 [org.volenta/datamos "0.1.3"]
+                 [org.volenta/datamos "0.1.4-SNAPSHOT"]
                  [mount "0.1.11"]]
-  :main datamos.config.core
+  :main ^:skip-aot datamos.config.core
   :aot [datamos.config.core]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}

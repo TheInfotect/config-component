@@ -1,6 +1,6 @@
-(ns config-component.core-test
+(ns datamos.config.core-test
   (:require [clojure.test :refer :all]
-            [config-component.core :refer :all]))
+            [datamos.config.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
