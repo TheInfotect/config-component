@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/config-component.iml" filepath="$PROJECT_DIR$/config-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/datamos.config.iml" filepath="$PROJECT_DIR$/datamos.config.iml" />
     </modules>
   </component>
 </project>

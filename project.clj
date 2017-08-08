@@ -4,5 +4,5 @@
   :license {:name "GNU AFFERO GENERAL PUBLIC LICENSE, Version 3"
             :url "https://www.gnu.org/licenses/agpl-3.0.nl.html"}
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
-                 [org.clojars.the-infotect/datamos "0.1.2"]
+                 [org.volenta/datamos "0.1.3"]
                  [mount "0.1.11"]])
