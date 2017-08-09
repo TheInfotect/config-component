@@ -68,7 +68,7 @@
     (log/debug "@register" (log/get-env))
     (when (apply = values)
       (do
-        #_(println "doing the dissoc en assoc loop")
+        (log/trace "@register - duplicate module-fns" (log/get-env))
         (swap! remote-components (fn [m]
                                    (dissoc m
                                            (first (rdf-fn/subject-object-by-predicate m :dms-def/function)))))))
