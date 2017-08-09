@@ -8,7 +8,8 @@
              [rdf-function :as rdf-fn]
              [messaging :as dm]
              [sign-up :as sup]]
-            [clojure.core.async :as async]))
+            [clojure.core.async :as async]
+            [taoensso.timbre :as log]))
 
 (defonce ^:private config (atom {}))
 
@@ -44,14 +45,14 @@
   [_ _ message]
   (let [msg-header (:datamos/logistic message)
         sender-uri (apply first (filter (fn [x] (= :dms-def/sender (rdf-fn/value-from-nested-map (conj {} x)))) (rdf-fn/predicate-filter msg-header #{:dms-def/transmit})))]
+    (log/debug "@registration" (log/get-env))
     (swap!
       the-registry
       conj
       (rdf-fn/predicate-filter
         (rdf-fn/message-content message)
         registry-predicates-set))
-    #_(println "@registration - Yep, message arrived here as well!\n" message)
-    (dcom/speak dcom/speak-connection dm/exchange base/component sender-uri :dms-def/component :datamos/registry @the-registry)))
+    (dcom/speak dcom/speak-connection dm/exchange base/component sender-uri :dms-def/module :datamos/registry @the-registry)))
 
 (defn local-register
   []
@@ -64,7 +65,7 @@
         values (rdf-fn/values-by-predicate :dms-def/function
                                            rdf-content
                                            r)]
-    #_(println "@register - endpoint of the line:\n" message)
+    (log/debug "@register" (log/get-env))
     (when (apply = values)
       (do
         #_(println "doing the dissoc en assoc loop")
@@ -75,7 +76,6 @@
 
 (defn de-register
   [_ _ message]
-  #_(println "@de-register - I'm new and all functionality is missing. It's a pitty\n" message)
   (let [msg-header (:datamos/logistic message)
         [[sender _]] (keep
                        (fn [s]
@@ -83,6 +83,7 @@
                            s
                            nil))
                        (rdf-fn/predicate-filter msg-header #{:dms-def/transmit}))]
+    (log/debug "@de-register" (log/get-env))
     (swap! the-registry dissoc sender)))
 
 (def component-fns {:datamos/registration datamos.config.core/registration
@@ -92,11 +93,13 @@
 (reset! config {:datamos-cfg/queue-name "config.datamos-fn"
                 :dms-def/provides       component-fns})
 
-(base/component-function {:datamos-cfg/component-type :datamos-fn/core
-                          :datamos-cfg/component-fn   :datamos-fn/registry
+(base/component-function {:datamos-cfg/module-type :datamos-fn/core
+                          :datamos-cfg/module-fn   :datamos-fn/registry
                           :datamos-cfg/local-register (datamos.config.core/local-register)
                           :dms-def/provides           datamos.config.core/component-fns})
 
 (defn -main
   [& args]
-  (dc/reset))
+  (do
+    (log/info "Q-main - Config module starting")
+    (dc/reset)))
