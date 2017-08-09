@@ -94,8 +94,8 @@
 
 (base/component-function {:datamos-cfg/component-type :datamos-fn/core
                           :datamos-cfg/component-fn   :datamos-fn/registry
-                          :datamos-cfg/local-register datamos.config.core/local-register
-                          :dms-def/provides datamos.config.core/component-fns})
+                          :datamos-cfg/local-register (datamos.config.core/local-register)
+                          :dms-def/provides           datamos.config.core/component-fns})
 
 (defn -main
   [& args]
