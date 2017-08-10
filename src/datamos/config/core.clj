@@ -41,6 +41,15 @@
           :start (dcom/response config-local-channel base/component)
           :stop (async/close! config-responder))
 
+(defn init-registry
+  []
+  (do
+    (reset! the-registry {})
+    (reset! remote-components {})))
+
+(defstate initialize
+          :start (init-registry))
+
 (defn registration
   [_ _ message]
   (let [msg-header (:datamos/logistic message)
