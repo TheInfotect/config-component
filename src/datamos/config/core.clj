@@ -7,7 +7,8 @@
              [base :as base]
              [rdf-function :as rdf-fn]
              [messaging :as dm]
-             [sign-up :as sup]]
+             [sign-up :as sup]
+             [module-helpers :as hlp]]
             [clojure.core.async :as async]
             [taoensso.timbre :as log]))
 
@@ -15,7 +16,7 @@
 
 (defonce ^:private the-registry (atom {}))
 
-(defonce ^:private remote-components (atom {}))
+(defonce remote-components (atom {}))
 
 (def registry-predicates-set
   #{:rdf/type :rdfs/label :dms-def/function :dms-def/provides})
@@ -67,22 +68,6 @@
   []
   @remote-components)
 
-(defn register
-  [_ _ message]
-  (let [rdf-content (rdf-fn/message-content message)
-        r (local-register)
-        values (rdf-fn/values-by-predicate :dms-def/function
-                                           rdf-content
-                                           r)]
-    (log/debug "@register" (log/get-env))
-    (when (apply = values)
-      (do
-        (log/trace "@register - duplicate module-fns" (log/get-env))
-        (swap! remote-components (fn [m]
-                                   (dissoc m
-                                           (first (rdf-fn/subject-object-by-predicate m :dms-def/function)))))))
-    (swap! remote-components conj rdf-content)))
-
 (defn de-register
   [_ _ message]
   (let [msg-header (:datamos/logistic message)
@@ -95,9 +80,10 @@
     (log/debug "@de-register" (log/get-env))
     (swap! the-registry dissoc sender)))
 
-(def component-fns {:datamos/registration datamos.config.core/registration
-                    :datamos/registry     datamos.config.core/register
-                    :datamos/de-register  datamos.config.core/de-register})
+(def component-fns (merge
+                     {:datamos/registration datamos.config.core/registration
+                      :datamos/de-register  datamos.config.core/de-register}
+                     (hlp/local-module-register remote-components)))
 
 (reset! config {:datamos-cfg/queue-name "config.datamos-fn"
                 :dms-def/provides       component-fns})
