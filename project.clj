@@ -9,7 +9,6 @@
                  [com.taoensso/timbre "4.10.0"]
                  [org.clojure/tools.namespace "0.2.11"]]
   :main ^:skip-aot datamos.config.core
-  :aot [datamos.config.core]
   :test-paths ["test"]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}

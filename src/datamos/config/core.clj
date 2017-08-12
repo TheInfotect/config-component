@@ -1,7 +1,6 @@
 (ns datamos.config.core
   (:refer-clojure)
-  (:gen-class)
-  (:require [mount.core :as mnt :refer [defstate start stop]]
+  (:require [mount.core :as mnt :refer [defstate]]
             [datamos
              [core :as dc]
              [communication :as dcom]
@@ -13,7 +12,7 @@
             [clojure.core.async :as async]
             [taoensso.timbre :as log]
             [taoensso.timbre.appenders.core :as appenders]
-            [clojure.tools.namespace.repl :as ctn-repl :refer [refresh set-refresh-dirs]]))
+            [clojure.tools.namespace.repl :refer [refresh set-refresh-dirs]]))
 
 (defonce ^:private config (atom {}))
 
@@ -96,34 +95,9 @@
                           :datamos-cfg/local-register (datamos.config.core/local-register)
                           :dms-def/provides           datamos.config.core/component-fns})
 
-(defn go
-  []
-  (do
-    (log/merge-config!
-      {:appenders
-       {:println {:min-level :info}
-        :spit    (merge (appenders/spit-appender {:fname "log/datamos.log"})
-                        {:min-level :trace})}}))
-  (log/info "@go - Starting dataMos")
-  (start)
-  (log/info "@go - dataMos Running"))
-
-(defn stp
-  []
-  (do
-    (stop)
-    (log/info "@stop - dataMos has stopped")))
-
-(defn reset
-  []
-  (do
-    (stp)
-    (refresh)
-    (go)))
-
 (defn -main
   [& args]
   (do
     (log/info "@-main - Config module starting")
     (set-refresh-dirs "src/datamos/config")
-    (reset)))
+    (dc/reset)))
