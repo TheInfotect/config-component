@@ -1,4 +1,4 @@
-(defproject org.volenta/datamos.config "0.1.5.3"
+(defproject org.volenta/datamos.config "0.1.5.4"
   :description "Config module for dataMos."
   :url "http://theinfotect.org/datamos"
   :license {:name "GNU AFFERO GENERAL PUBLIC LICENSE, Version 3"
