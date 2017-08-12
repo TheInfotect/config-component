@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
                  [org.volenta/datamos "0.1.5.7"]
                  [mount "0.1.11"]
-                 [com.taoensso/timbre "4.10.0"]]
+                 [com.taoensso/timbre "4.10.0"]
+                 [org.clojure/tools.namespace "0.2.11"]]
   :main ^:skip-aot datamos.config.core
   :aot [datamos.config.core]
   :test-paths ["test"]
