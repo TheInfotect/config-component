@@ -64,7 +64,7 @@
       (rdf-fn/predicate-filter
         (rdf-fn/message-content message)
         registry-predicates-set))
-    (dcom/speak dcom/speak-connection dm/exchange base/component sender-uri :dms-def/module :datamos/registry @the-registry)))
+    (dcom/speak dcom/speak-connection dm/exchange base/component sender-uri :dmsfn-def/module-id :datamos-fn/registry @the-registry)))
 
 (defn local-register
   []
@@ -83,16 +83,16 @@
     (swap! the-registry dissoc sender)))
 
 (def component-fns (merge
-                     {:datamos/registration datamos.config.core/registration
-                      :datamos/de-register  datamos.config.core/de-register}
+                     {:datamos-fn/registration datamos.config.core/registration
+                      :datamos-fn/de-register  datamos.config.core/de-register}
                      (hlp/local-module-register remote-components)))
 
-(reset! config {:datamos-cfg/queue-name "config.datamos-fn"
+(reset! config {:datamos/queue-name "config.datamos-fn"
                 :dms-def/provides       component-fns})
 
-(base/component-function {:datamos-cfg/module-type :datamos-fn/core
-                          :datamos-cfg/module-fn   :datamos-fn/registry
-                          :datamos-cfg/local-register (datamos.config.core/local-register)
+(base/component-function {:dmsfn-def/module-type :dmsfn-def/core
+                          :dmsfn-def/module-name   :dmsfn-def/config
+                          :dmsfn-def/local-register (datamos.config.core/local-register)
                           :dms-def/provides           datamos.config.core/component-fns})
 
 (defn -main
