@@ -79,7 +79,7 @@
                            s
                            nil))
                        (rdf-fn/predicate-filter msg-header #{:dms-def/transmit}))]
-    (log/debug "@de-register" (log/get-env))
+    (log/debug "\n  @de-register" "\n    msg-header" msg-header "\n    sender" sender)
     (swap! the-registry dissoc sender)))
 
 (def component-fns (merge
